@@ -1,27 +1,27 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
-
-app = FastAPI()
-
-class Msg(BaseModel):
-    msg: str
-
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World. Welcome to FastAPI!"}
-
-
-@app.get("/path")
-async def demo_get():
-    return {"message": "This is /path endpoint, use a post request to transform the text to uppercase"}
-
-
-@app.post("/path")
-async def demo_post(inp: Msg):
-    return {"message": inp.msg.upper()}
-
-
-@app.get("/path/{path_id}")
-async def demo_get_path_id(path_id: int):
-    return {"message": f"This is /path/{path_id} endpoint, use post request to retrieve result"}
+import asyncio 
+from telethon import TelegramClient, events 
+ 
+async def main(): 
+    event = asyncio.Event() 
+    bot_token = '5843294524:AAG4f_vpzCh0pasz_3vu37kSVlduP9bUjss' 
+    client = TelegramClient('ghj'+bot_token, "25563226", "6f7f9f4e4ea37fd24801af14f2e55fce") 
+    await client.start(bot_token=bot_token) 
+    bot_chat_id = 5843294524
+ 
+    @client.on(events.NewMessage(chats=bot_chat_id)) 
+    async def my_event_handler(event): 
+        if event.message.from_id.user_id == 5843294524: 
+               if '#AD' in event.message.message or '#paidAD' in event.message.message or 'sponsored' in event.message.message: 
+                print(event) 
+                await client.delete_messages(event.message.peer_id.user_id, event.message.id) 
+                print('message deleted successfully') 
+               else: 
+                    print('failed') 
+                    pass 
+    client.add_event_handler(my_event_handler) 
+    while True: 
+        await event.wait() 
+        event.clear() 
+ 
+if name == '__main__': 
+    asyncio.run(main())
